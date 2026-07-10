@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Card Component</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Core Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+
+        /* Card Container */
+        .card-container {
+            perspective: 1000px;
+        }
+
+        /* The Faculty Card */
+        .faculty-card {
+            position: relative;
+            width: 420px;
+            height: 480px;
+            background-color: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.4s ease;
+        }
+
+        /* Card subtle lift on hover */
+        .faculty-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Faculty Image Styling */
+        .faculty-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.6s ease;
+        }
+
+        .faculty-card:hover .faculty-img {
+            transform: scale(1.05);
+            /* Slight zoom effect on hover */
+        }
+
+        /* Default Bottom Banner (Green Gradient) */
+        .default-banner {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 24px 20px;
+            background: linear-gradient(to top, #0074bca2 20%, #0074bc4d 70%, transparent);
+            color: #ffffff;
+            z-index: 2;
+            transition: opacity 0.3s ease;
+        }
+
+        /* Fade out the basic banner slightly when full overlay arrives */
+        .faculty-card:hover .default-banner {
+            opacity: 0;
+        }
+
+        .faculty-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .faculty-role {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #ffd700;
+            /* Sophisticated gold tone */
+            letter-spacing: 1px;
+        }
+
+        /* Blue Hover Slide Overlay */
+        .hover-slide {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0, 116, 188, 0.76);
+            /* Transparent blue */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* Safari support */
+
+            color: #ffffff;
+            padding: 40px 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            z-index: 3;
+
+            transition: bottom 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .item:nth-child(odd) .hover-slide {
+            background: rgba(0, 116, 188, .85);
+        }
+
+        /* Even Cards (2,4,6,8...) = Yellow */
+        .item:nth-child(even) .hover-slide {
+            background: rgba(255, 193, 7, .88);
+            color: #222;
+        }
+
+        /* Yellow cards ke text ko dark kar do */
+        .item:nth-child(even) .slide-name,
+        .item:nth-child(even) .slide-tagline,
+        .item:nth-child(even) .slide-description {
+            color: #222;
+        }
+
+        .item:nth-child(even) .divider {
+            background: rgba(0, 0, 0, .2);
+        }
+
+        /* Triggering the slide action on hover */
+        .faculty-card:hover .hover-slide {
+            bottom: 0;
+        }
+
+        /* Content Layout inside the Slider */
+        .slide-content {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s;
+            /* Delicate delay for sleek look */
+        }
+
+        .faculty-card:hover .slide-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .slide-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+
+        .slide-tagline {
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #ffcc00;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.15);
+            margin-bottom: 24px;
+        }
+
+        .slide-description {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #d1d5db;
+            /* Softer white for readability */
+            font-weight: 400;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="faculty-section py-4">
+        <div class="container-fluid">
+            <div class="owl-carousel owl-theme owl-banner" data-owl-carousel='{
+        "margin": 10, 
+        "nav":false,
+        "dots":true, 
+        "loop":true,
+        "autoplay":true,
+        "autoplayTimeout":4000,
+        "smartSpeed":1050,
+        "responsive":{"0":{"items":1}, "600":{"items":2},"1000":{"items":4}}
+    }'>
+                <div class="item">
+                    <div class="faculty-card yellow-card">
+                        <img src="assets/img/chayan-roy-chowdhury.webp" alt="Chayan Roy Chowdhury" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Chayan Roy Chowdhury</h3>
+                            <p class="faculty-role">MATH HOD</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Chayan Roy Chowdhury</h2>
+                                <p class="slide-tagline">MATH HOD</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Mathematics is not about memorizing formulas—it is about cultivating logical
+                                    thinking, curiosity, and deep conceptual understanding. My mission is to transform
+                                    complex concepts into simple, intuitive learning experiences that inspire
+                                    confidence, foster critical thinking, and empower every student to achieve their
+                                    fullest potential.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/himadri-gangopadhyay.webp" alt="Himadri Gangopadhyay" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Himadri Gangopadhyay</h3>
+                            <p class="faculty-role">CHEMISTRY HOD</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Himadri Gangopadhyay</h2>
+                                <p class="slide-tagline">CHEMISTRY HOD</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Mayan Das, the Head of Department for Physics, brings a wealth of knowledge and
+                                    experience to the field. His dedication to teaching and research has made him a
+                                    respected figure among students and colleagues alike.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card yellow-card">
+                        <img src="assets/img/debajyoti-patra.webp" alt="Debajyoti Patra" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Debajyoti Patra</h3>
+                            <p class="faculty-role">BIOLOGY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Debajyoti Patra</h2>
+                                <p class="slide-tagline">BIOLOGY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Rukhsar Sheikh, the Head of Department for Physics, brings a wealth of knowledge and
+                                    experience to the field. His dedication to teaching and research has made him a
+                                    respected figure among students and colleagues alike.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/rajarshi-majumder.webp" alt="Rajarshi Majumder" class="faculty-img">
+                        alt="Rukhsar Sheikh" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Rajarshi Majumder</h3>
+                            <p class="faculty-role">MATH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Rajarshi Majumder</h2>
+                                <p class="slide-tagline">MATH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    The main motto of education is, it must enable a student to think. And Mathematics
+                                    makes that thinking logical and quantifiable. The subject, where the mistakes are
+                                    the best teachers, where solving a problem in five different ways is more effective
+                                    than solving five different problems. I always encourage them to apply their
+                                    knowledge coming up with their own impeccable thinking instead of rote learning of
+                                    formulae.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/suchandra-pal.webp" alt="Suchandra Pal" class="faculty-img">
+                        alt="Rukhsar Sheikh" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Suchandra Pal</h3>
+                            <p class="faculty-role">BIOLOGY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Suchandra Pal</h2>
+                                <p class="slide-tagline">BIOLOGY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Like DNA quietly carrying life's blueprint, every student holds immense potential
+                                    waiting to be expressed. Just as the heart sustains life through every heartbeat,
+                                    curiosity sustains learning through every question. I strive to make biology come
+                                    alive by helping students understand not only what happens, but why it happens.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/shymal-das.webp" alt="Shymal Das" class="faculty-img">
+                        alt="Rukhsar Sheikh" class="faculty-img">
+
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Shymal Das</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Shymal Das</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics is the universe's code. To master it, don't memorize—observe deeply,
+                                    question everything, embrace the struggle of problem-solving, and apply its laws to
+                                    understand reality from classroom to lifelong curiosity.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/poulomi-das.webp" alt="Poulomi Das" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Poulomi Das</h3>
+                            <p class="faculty-role">HISTORY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Poulomi Das</h2>
+                                <p class="slide-tagline">HISTORY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    History connects us with our roots and broadens our perspective. I aim to make every
+                                    lesson engaging, relevant, and inspiring for lifelong learners.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/susmita-chakraborty.webp" alt="Susmita Chakraborty" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Susmita Chakraborty</h3>
+                            <p class="faculty-role">GEOGRAPHY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Susmita Chakraborty</h2>
+                                <p class="slide-tagline">GEOGRAPHY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Geography is more than the study of maps; it is the journey of understanding our
+                                    Earth, our environment, and our lives. It reveals how mountains, rivers, climate,
+                                    and people are deeply connected, inspiring us to understand, respect, and protect
+                                    the world we call home.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/sanjib-saha.webp" alt="Sanjib Saha" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Sanjib Saha</h3>
+                            <p class="faculty-role">MATH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Sanjib Saha</h2>
+                                <p class="slide-tagline">MATH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Through mathematics, we learn courage. Mistakes are not failures; we celebrate them
+                                    like maps leading to discovery. Maths has digits, and each digit has its own
+                                    character. "Zero is the most formidable unseen protagonist" that changes the value
+                                    of every number beside it. Exploration of numbers can replace fear with excitement
+                                    and confidence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/ankuran-das.webp" alt="Ankuran Das" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Ankuran Das</h3>
+                            <p class="faculty-role">MATH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Ankuran Das</h2>
+                                <p class="slide-tagline">MATH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    "Mathematics is the only place where letters become numbers, impossible becomes
+                                    possible, and mistakes turn into discoveries. It's not just a subject—it's a gym for
+                                    your brain!
+                                    Mathematics is the world's oldest puzzle game, and nobody is ever too young or too
+                                    old to play it. Numbers may look quiet on paper, but they secretly run the world.
+                                    They hide in music, flowers, footballs, video games, and even pizza slices.
+                                    Think of mathematics as a magical detective story. Every question is a mystery,
+                                    every hint is a clue, and every correct answer makes you feel like a genius
+                                    shouting, “Aha! I cracked it!"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/krishnendu-brahmachari.webp" alt="Krishnendu Brahmachari"
+                            class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Krishnendu Brahmachari</h3>
+                            <p class="faculty-role">MATH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Krishnendu Brahmachari</h2>
+                                <p class="slide-tagline">MATH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Mathematics is the elegant logic beneath reality. I teach to reveal it — pairing
+                                    rigorous analysis with vivid visual intuition so students see the beauty in
+                                    equations, not just the steps, and master any exam with real confidence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/hasna-hena-parvin-kajal.webp" alt="Hasna Hena Parvin Kajal"
+                            class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Hasna Hena Parvin Kajal</h3>
+                            <p class="faculty-role">MATH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Hasna Hena Parvin Kajal</h2>
+                                <p class="slide-tagline">MATH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    I believe mathematics develops logical thinking, problem-solving skills, and
+                                    confidence. My aim is to make every concept simple, engaging, and meaningful,
+                                    inspiring students to enjoy learning mathematics with curiosity. Every mathematical
+                                    concept opens the door to critical thinking and real-life problem-solving. I strive
+                                    to build confidence, curiosity, and a lifelong love for mathematics.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/sarbani-chakraborty.webp" alt="Sarbani Chakraborty" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Sarbani Chakraborty</h3>
+                            <p class="faculty-role">BIOLOGY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Sarbani Chakraborty</h2>
+                                <p class="slide-tagline">BIOLOGY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    When unicellular organisms evolve into the plants and animals we see around us,
+                                    microscopes allow us to clearly understand their internal anatomy and external
+                                    morphology. Biology ceases to be confined to the pages of a book when one can easily
+                                    grasp everything from the nature of curd on a hot day to the adaptations of
+                                    migratory birds in winter.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/archita-roy-chowdhury.webp" alt="Archita Roy Chowdhury"
+                            class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Archita Roy Chowdhury</h3>
+                            <p class="faculty-role">BIOLOGY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Archita Roy Chowdhury</h2>
+                                <p class="slide-tagline">BIOLOGY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Biology is not just the study of life—it is the key to understanding the wonders of
+                                    nature and ourselves. My mission is to simplify complex biological concepts through
+                                    clear explanations, conceptual learning, and real-life connections, inspiring
+                                    curiosity, scientific thinking, and confidence in every student.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/kahkashan-alam.webp" alt="Kahkashan Alam" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Kahkashan Alam</h3>
+                            <p class="faculty-role">BIOLOGY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Kahkashan Alam</h2>
+                                <p class="slide-tagline">BIOLOGY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Biology is more than a subject—it's the story of life itself, one that you can
+                                    observe and not just memorize. From the tiniest cell to the most complex ecosystems,
+                                    every lesson reveals the incredible wonders of nature, making learning fascinating,
+                                    meaningful, and inspiring.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/tamoghna-ganguly.webp" alt="Tamoghna Ganguly" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Tamoghna Ganguly</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Tamoghna Ganguly</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics is not about memorizing equations—it is about comprehending the fundamental
+                                    laws of nature. My methodology deconstructs sophisticated concepts into logical,
+                                    articulate frameworks that cultivate intellectual curiosity, sharpen analytical
+                                    reasoning, and empower academic excellence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/dattatreya-jana.webp" alt="Dattatreya Jana" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Dattatreya Jana</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Dattatreya Jana</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics illuminates the universe. My teaching philosophy prioritizes the student who
+                                    struggles most. With their honest effort and willingness to learn, I am deeply
+                                    dedicated to their success.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/arnab-chakraborty.webp" alt="Arnab Chakraborty" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Arnab Chakraborty</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Arnab Chakraborty</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics is not about memorizing equations—it is about comprehending the fundamental
+                                    laws of nature. My methodology deconstructs sophisticated concepts into logical,
+                                    articulate frameworks that cultivate intellectual curiosity, sharpen analytical
+                                    reasoning, and empower academic excellence.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/subhadeep-mukherjee.webp" alt="Subhadeep Mukherjee" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Subhadeep Mukherjee</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Subhadeep Mukherjee</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics is not merely a subject; it is a celebration of life and the key to
+                                    understanding Mother Nature. It nurtures curiosity, sharpens our thinking, and
+                                    reveals the harmony behind the universe. My dream is to inspire students to become
+                                    explorers who enjoy learning rather than merely studying. Spend time with Physics,
+                                    and Physics will take care of your dreams. Love Physics, celebrate learning, and let
+                                    curiosity guide your journey.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/aritra-dutta.webp" alt="Aritra Dutta" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Aritra Dutta</h3>
+                            <p class="faculty-role">PHYSICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Aritra Dutta</h2>
+                                <p class="slide-tagline">PHYSICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Physics is not merely a subject; it is a celebration of life and the key to
+                                    understanding Mother Nature. It nurtures curiosity, sharpens our thinking, and
+                                    reveals the harmony behind the universe. My dream is to inspire students to become
+                                    explorers who enjoy learning rather than merely studying. Spend time with Physics,
+                                    and Physics will take care of your dreams. Love Physics, celebrate learning, and let
+                                    curiosity guide your journey.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/arijit-paul.webp" alt="Arijit Paul" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Arijit Paul</h3>
+                            <p class="faculty-role">CHEMISTRY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Arijit Paul</h2>
+                                <p class="slide-tagline">CHEMISTRY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    When coal is subjected to high pressure and heat, i.e., in extreme conditions, it
+                                    transforms into diamond. Similarly, pressure and extreme conditions in life do not
+                                    destroy us; rather, they transform us into the best versions of ourselves,
+                                    completing our reaction.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/animesh-mukherjee.webp" alt="Animesh Mukherjee" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Animesh Mukherjee</h3>
+                            <p class="faculty-role">CHEMISTRY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Animesh Mukherjee</h2>
+                                <p class="slide-tagline">CHEMISTRY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    When coal is subjected to high pressure and heat, i.e., in extreme conditions, it
+                                    transforms into diamond. Similarly, pressure and extreme conditions in life do not
+                                    destroy us; rather, they transform us into the best versions of ourselves,
+                                    completing our reaction.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/puja-jaiswal.webp" alt="Puja Jaiswal" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Puja Jaiswal</h3>
+                            <p class="faculty-role">CHEMISTRY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Puja Jaiswal</h2>
+                                <p class="slide-tagline">CHEMISTRY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    When coal is subjected to high pressure and heat, i.e., in extreme conditions, it
+                                    transforms into diamond. Similarly, pressure and extreme conditions in life do not
+                                    destroy us; rather, they transform us into the best versions of ourselves,
+                                    completing our reaction.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/payel-dutta.webp" alt="Payel Dutta" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Payel Dutta</h3>
+                            <p class="faculty-role">CHEMISTRY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Payel Dutta</h2>
+                                <p class="slide-tagline">CHEMISTRY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Like atoms silently bonding to form all matter, every reaction holds stories of
+                                    transformation. Just as electrons drive change with each shift, questions drive
+                                    discovery. I strive to make chemistry come alive by revealing the ‘why’ behind every
+                                    change.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/dipankar-das.webp" alt="Dipankar Das" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Dipankar Das</h3>
+                            <p class="faculty-role">BENGALI</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Dipankar Das</h2>
+                                <p class="slide-tagline">BENGALI</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Literature plants a green tree in the reader’s heart. As that tree grows, songbirds
+                                    gather and fill its branches with melody. As a humble teacher, my role is to nurture
+                                    that tree in my students’ hearts through the beauty and power of the Bengali
+                                    language.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/arundhati-saha.webp" alt="Arundhati Saha" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Arundhati Saha</h3>
+                            <p class="faculty-role">BENGALI</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Arundhati Saha</h2>
+                                <p class="slide-tagline">BENGALI</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Literature plants a green tree in the reader’s heart. As that tree grows, songbirds
+                                    gather and fill its branches with melody. As a humble teacher, my role is to nurture
+                                    that tree in my students’ hearts through the beauty and power of the Bengali
+                                    language.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/anibrata-maitra.webp" alt="Anibrata Maitra" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Anibrata Maitra</h3>
+                            <p class="faculty-role">BENGALI</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Anibrata Maitra</h2>
+                                <p class="slide-tagline">BENGALI</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    English is not merely a subject to be taught but an experience to be lived. Rooted
+                                    in constructivist, experiential, and holistic education, I believe teaching is a
+                                    shared journey where teachers and learners grow together. By intertwining language
+                                    with music, literature, art, sports, dance, and everyday life, I strive to inspire
+                                    curiosity, creativity, empathy, critical thinking, and the confidence to discover
+                                    one's authentic voice and limitless potential.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/reetam-roy-chowdhury.webp" alt="Reetam Roy Chowdhury" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Reetam Roy Chowdhury</h3>
+                            <p class="faculty-role">ENGLISH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Reetam Roy Chowdhury</h2>
+                                <p class="slide-tagline">ENGLISH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Language is best learned through meaningful experiences, not memorisation. I believe
+                                    English teaching should be interactive, learner-centred, and connected to real life.
+                                    By blending language with literature, art, music, culture, and everyday experiences,
+                                    I strive to foster the critical thinking and inquisitiveness in communication.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/sheli-saha.webp" alt="Sheli Saha" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Sheli Saha</h3>
+                            <p class="faculty-role">HISTORY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Sheli Saha</h2>
+                                <p class="slide-tagline">HISTORY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    History is about understanding people, societies, and the forces that shape
+                                    civilizations. My teaching philosophy is to make every lesson meaningful through
+                                    storytelling, analysis, and discussion, helping students develop knowledge, empathy,
+                                    and independent thinking.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/susmita-chakraborty.webp" alt="Susmita Chakraborty" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Susmita Chakraborty</h3>
+                            <p class="faculty-role">GEOGRAPHY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Susmita Chakraborty</h2>
+                                <p class="slide-tagline">GEOGRAPHY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Geography is more than the study of maps; it is the journey of understanding our
+                                    Earth, our environment, and our lives. It reveals how mountains, rivers, climate,
+                                    and people are deeply connected, inspiring us to understand, respect, and protect
+                                    the world we call home.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/kusum-kansari.webp" alt="Kusum Kansari" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Kusum Kansari</h3>
+                            <p class="faculty-role">GEOGRAPHY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Kusum Kansari</h2>
+                                <p class="slide-tagline">GEOGRAPHY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Geography is more than the study of places; It is the science of understanding the
+                                    dynamic relationships between people, places, and the environment that shape our
+                                    world. I strive to make geographical concepts meaningful through real-world
+                                    connections, interactive learning, and critical inquiry, empowering every student to
+                                    think analytically, explore with curiosity, and apply geographical knowledge to
+                                    real-world challenges.
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/tamalika-chowdhury.webp" alt="Tamalika Chowdhury" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Tamalika Chowdhury</h3>
+                            <p class="faculty-role">PHILOSOPHY</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Tamalika Chowdhury</h2>
+                                <p class="slide-tagline">PHILOSOPHY</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Philosophy is not about memorizing theories—it is about cultivating critical
+                                    thinking, intellectual curiosity, and a deeper understanding of life, knowledge, and
+                                    human existence. My mission is to transform complex philosophical ideas into clear,
+                                    engaging, and meaningful learning experiences that inspire independent thought,
+                                    encourage thoughtful dialogue, and empower every student to develop a reasoned
+                                    perspective on the world.
+
+
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/megha-roy.webp" alt="Megha Roy" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Megha Roy</h3>
+                            <p class="faculty-role">NUTRITION</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Megha Roy</h2>
+                                <p class="slide-tagline">NUTRITION</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    The study of Food and Nutrition is an investment in life itself, because
+                                    understanding what nourishes us is the first step toward a healthier world. Every
+                                    mindful meal is a quiet promise to your future self, where good nutrition transforms
+                                    ordinary food into extraordinary health and lasting vitality.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/goutami-auddy-manna.webp" alt="Goutami Auddy Manna" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Goutami Auddy Manna</h3>
+                            <p class="faculty-role">EDUCATION</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Goutami Auddy Manna</h2>
+                                <p class="slide-tagline">EDUCATION</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Education as a subject focuses on teaching, learning, child development, educational
+                                    psychology, teaching methods, and philosophy of education. It helps develop
+                                    knowledge, values, communication skills, and effective classroom practices for
+                                    overall personality and social development.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/sabyasachi-saha.webp" alt="Sabyasachi Saha" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Sabyasachi Saha</h3>
+                            <p class="faculty-role">POL. SCIENCE</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Sabyasachi Saha</h2>
+                                <p class="slide-tagline">POL. SCIENCE</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Political Science is not merely the study of government—it is the art of
+                                    understanding power, justice, democracy, and society. My mission is to inspire
+                                    critical thinking, constitutional values, and analytical skills, empowering students
+                                    to become informed citizens and thoughtful leaders.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/koushik-sengupta.webp" alt="Koushik Sengupta" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Koushik Sengupta</h3>
+                            <p class="faculty-role">ECONOMICS</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Koushik Sengupta</h2>
+                                <p class="slide-tagline">ECONOMICS</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    "Economics is the subject that every human being is using in the world knowingly or
+                                    unknowingly. Through it, we can built a well being nation in future & can sustain it
+                                    with proper monitoring.
+
+                                    It is my endeavour to put into light on the arena to understand it and later
+                                    enlighten to all of us in future. "
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/nirmoy-banerjee.webp" alt="Nirmoy Banerjee" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Nirmoy Banerjee</h3>
+                            <p class="faculty-role">COMPUTER APPLICATION</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Nirmoy Banerjee</h2>
+                                <p class="slide-tagline">COMPUTER APPLICATION</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    "Economics is the subject that every human being is using in the world knowingly or
+                                    unknowingly. Through it, we can built a well being nation in future & can sustain it
+                                    with proper monitoring.
+
+                                    It is my endeavour to put into light on the arena to understand it and later
+                                    enlighten to all of us in future. "
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="item">
+                    <div class="faculty-card blue-card">
+                        <img src="assets/img/prita-mitra.webp" alt="Prita Mitra" class="faculty-img">
+                        <div class="default-banner">
+                            <h3 class="faculty-name">Prita Mitra</h3>
+                            <p class="faculty-role">SPOKEN ENGLISH</p>
+                        </div>
+
+                        <div class="hover-slide">
+                            <div class="slide-content">
+                                <h2 class="slide-name">Prita Mitra</h2>
+                                <p class="slide-tagline">SPOKEN ENGLISH</p>
+                                <hr class="divider">
+                                <p class="slide-description">
+                                    Language is not a static code to be memorized, but a living narrative we inhabit.
+                                    Grounded in a holistic, learner-centered approach, I view teaching as a shared
+                                    journey where educators and students grow together. By intertwining language with
+                                    literature, art, music, culture, and the rhythm of everyday life, I strive to move
+                                    beyond traditional instruction to make communication deeply relevant. My ultimate
+                                    goal is to foster critical thinking, inspire genuine curiosity, and build the
+                                    empathy and confidence learners need to discover their authentic voices and
+                                    limitless potential.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+
+    <script src="assets/js/main.js"></script>
+</body>
+
+</html>
