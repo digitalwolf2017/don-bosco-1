@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You - Registration Confirmed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-blue: #186fbb;
+      --accent-yellow: #ffcd0e;
+      --text-dark: #0f172a;
+      --text-muted: #64748b;
+      --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      --card-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      color: var(--text-dark);
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      box-shadow: 0 20px 40px -15px rgba(24, 111, 187, 0.08),
+                  0 0 1px 1px rgba(0, 0, 0, 0.03);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Top Accent Line */
+    .brand-border {
+      height: 6px;
+      background: linear-gradient(90deg, var(--primary-blue) 70%, var(--accent-yellow) 30%);
+    }
+
+    .content {
+      padding: 3rem 2.5rem;
+      text-align: center;
+    }
+
+    /* Animated Icon Wrapper */
+    .icon-container {
+      position: relative;
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-bg {
+      position: absolute;
+      inset: 0;
+      background: var(--primary-blue);
+      opacity: 0.1;
+      border-radius: 50%;
+      transform: scale(1);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    .icon-circle {
+      width: 72px;
+      height: 72px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      box-shadow: 0 10px 20px rgba(24, 111, 187, 0.25);
+    }
+
+    .icon-circle svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--accent-yellow);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* Typography */
+    .badge {
+      display: inline-block;
+      background: rgba(255, 205, 14, 0.2);
+      color: #927200;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-dark);
+      margin-bottom: 0.75rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* Next Steps Card Grid */
+    .next-steps {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: left;
+      margin-bottom: 2.5rem;
+    }
+
+    .next-steps-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary-blue);
+      margin-bottom: 1rem;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 24px;
+      height: 24px;
+      background: var(--accent-yellow);
+      color: var(--text-dark);
+      font-size: 0.8rem;
+      font-weight: 800;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .step-text {
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+
+    .step-text span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 2px;
+    }
+
+    /* Actions */
+    .actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.875rem 1.75rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary-blue);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(24, 111, 187, 0.2);
+    }
+
+    .btn-primary:hover {
+      background: #145ca0;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-dark);
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.15; }
+      50% { transform: scale(1.15); opacity: 0.05; }
+    }
+
+    @media (max-width: 640px) {
+      .content { padding: 2rem 1.5rem; }
+      h1 { font-size: 1.75rem; }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="brand-border"></div>
+    <div class="content">
+      
+      <!-- Icon -->
+      <div class="icon-container">
+        <div class="icon-bg"></div>
+        <div class="icon-circle">
+          <svg viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <span class="badge">Registration Confirmed</span>
+      <h1>You're All Set!</h1>
+      <p class="subtitle">
+        Thank you for enrolling with us. We've sent a confirmation email along with your access details to your inbox.
+      </p>
+
+      <!-- Next Steps -->
+      <div class="next-steps">
+        <div class="next-steps-title">What Happens Next?</div>
+        
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            Check your inbox
+            <span>A verification email with setup steps is on its way.</span>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            Complete your profile
+            <span>Set up your learning preferences to get personalized course material.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <a href="#" class="btn btn-primary">Go to Dashboard</a>
+        <a href="#" class="btn btn-secondary">Explore Courses</a>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
